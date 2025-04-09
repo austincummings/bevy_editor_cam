@@ -7,7 +7,7 @@ fn main() {
             DefaultPlugins,
             MeshPickingPlugin,
             DefaultEditorCamPlugins,
-            bevy_framepace::FramepacePlugin,
+            // bevy_framepace::FramepacePlugin,
         ))
         .add_systems(Startup, (setup, setup_ui))
         .run();

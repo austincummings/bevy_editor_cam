@@ -10,7 +10,7 @@ fn main() {
             DefaultPlugins,
             MeshPickingPlugin,
             DefaultEditorCamPlugins,
-            bevy_framepace::FramepacePlugin,
+            // bevy_framepace::FramepacePlugin,
         ))
         .add_systems(Startup, (setup_camera, setup_scene, setup_ui))
         .add_systems(Update, (toggle_projection, toggle_zoom))

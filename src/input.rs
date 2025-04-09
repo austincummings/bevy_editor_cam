@@ -8,10 +8,10 @@ use bevy_input::{
     prelude::*,
 };
 use bevy_math::{prelude::*, DVec2, DVec3};
+use bevy_platform_support::collections::HashMap;
 use bevy_reflect::prelude::*;
 use bevy_render::{camera::CameraProjection, prelude::*};
 use bevy_transform::prelude::*;
-use bevy_utils::hashbrown::HashMap;
 use bevy_window::PrimaryWindow;
 
 use bevy_picking::pointer::{
@@ -285,9 +285,8 @@ impl EditorCamInputEvent {
                 .iter()
                 .filter(|m| m.pointer_id.eq(pointer))
                 .filter_map(|m| match m.action {
-                    PointerAction::Moved { delta } => Some(delta),
-                    PointerAction::Pressed { .. } => None,
-                    PointerAction::Canceled => None,
+                    PointerAction::Move { delta } => Some(delta),
+                    _ => None,
                 })
                 .sum();
 
@@ -344,5 +343,6 @@ fn screen_to_view_space(
             view_near_plane.y,
             controller.last_anchor_depth(),
         )),
+        Projection::Custom(_) => todo!(),
     }
 }

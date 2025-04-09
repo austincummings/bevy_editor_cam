@@ -2,7 +2,7 @@
 
 use std::{
     f32::consts::{FRAC_PI_2, PI},
-    time::Duration,
+    time::{Duration, Instant},
 };
 
 use bevy_ecs::prelude::*;
@@ -12,7 +12,6 @@ use bevy_reflect::prelude::*;
 use bevy_render::prelude::*;
 use bevy_time::prelude::*;
 use bevy_transform::prelude::*;
-use bevy_utils::Instant;
 use bevy_window::RequestRedraw;
 
 use super::{
@@ -391,6 +390,7 @@ impl EditorCam {
                 offset
             }
             Projection::Orthographic(ortho) => DVec2::new(-ortho.scale as f64, ortho.scale as f64),
+            Projection::Custom(custom) => todo!(),
         };
 
         let pan_translation_view_space = (pan * view_offset).extend(0.0);
@@ -449,6 +449,7 @@ impl EditorCam {
                     * 0.0015
                     * DVec3::new(1.0, 1.0, 0.0)
             }
+            Projection::Custom(custom) => todo!(),
         };
 
         // If we can zoom through objects, then scoot the anchor point forward when we hit the

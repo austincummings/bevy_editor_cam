@@ -18,7 +18,7 @@ fn main() {
             MeshPickingPlugin,
             big_space::BigSpacePlugin::<i128>::default(),
             big_space::debug::FloatingOriginDebugPlugin::<i128>::default(),
-            bevy_framepace::FramepacePlugin,
+            // bevy_framepace::FramepacePlugin,
         ))
         .add_plugins(DefaultEditorCamPlugins)
         .insert_resource(ClearColor(Color::BLACK))

@@ -1,11 +1,10 @@
-use std::time::Duration;
+use std::time::{Duration, Instant};
 
 use bevy::{
     core_pipeline::{bloom::Bloom, tonemapping::Tonemapping},
     pbr::ScreenSpaceAmbientOcclusion,
     prelude::*,
     render::primitives::Aabb,
-    utils::Instant,
     window::RequestRedraw,
 };
 use bevy_core_pipeline::smaa::Smaa;
@@ -20,7 +19,7 @@ fn main() {
             DefaultPlugins,
             DefaultEditorCamPlugins,
             MeshPickingPlugin,
-            bevy_framepace::FramepacePlugin,
+            // bevy_framepace::FramepacePlugin,
         ))
         // The camera controller works with reactive rendering:
         // .insert_resource(bevy::winit::WinitSettings::desktop_app())
@@ -98,7 +97,7 @@ fn toggle_projection(
         };
         dolly.send(DollyZoomTrigger {
             target_projection,
-            camera: cam.single(),
+            camera: cam.single().unwrap(),
         });
     }
 }
@@ -109,7 +108,7 @@ fn toggle_constraint(
     mut look_to: EventWriter<LookToTrigger>,
 ) {
     if keys.just_pressed(KeyCode::KeyC) {
-        let (entity, transform, mut editor) = cam.single_mut();
+        let (entity, transform, mut editor) = cam.single_mut().unwrap();
         match editor.orbit_constraint {
             OrbitConstraint::Fixed { .. } => editor.orbit_constraint = OrbitConstraint::Free,
             OrbitConstraint::Free => {
@@ -134,7 +133,7 @@ fn switch_direction(
     mut look_to: EventWriter<LookToTrigger>,
     cam: Query<(Entity, &Transform, &EditorCam)>,
 ) {
-    let (camera, transform, editor) = cam.single();
+    let (camera, transform, editor) = cam.single().unwrap();
     if keys.just_pressed(KeyCode::Digit1) {
         look_to.send(LookToTrigger::auto_snap_up_direction(
             Dir3::X,
@@ -234,7 +233,7 @@ fn explode(
     if let Some((toggled, start, start_amount)) = *toggle {
         let goal_amount = toggled as usize as f32;
         let t = (start.elapsed().as_secs_f32() / animation.as_secs_f32()).clamp(0.0, 1.0);
-        let progress = CubicSegment::new_bezier((0.25, 0.1), (0.25, 1.0)).ease(t);
+        let progress = CubicSegment::new_bezier_easing((0.25, 0.1), (0.25, 1.0)).ease(t);
         *explode_amount = start_amount + (goal_amount - start_amount) * progress;
         for (part, mut transform, aabb, start) in &mut parts {
             let start = if let Some(start) = start {

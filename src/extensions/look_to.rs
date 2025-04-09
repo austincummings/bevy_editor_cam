@@ -1,14 +1,17 @@
 //! A `bevy_editor_cam` extension that adds the ability to smoothly rotate the camera about its
 //! anchor point until it is looking in the specified direction.
 
-use std::{f32::consts::PI, time::Duration};
+use std::{
+    f32::consts::PI,
+    time::{Duration, Instant},
+};
 
 use bevy_app::prelude::*;
 use bevy_ecs::prelude::*;
 use bevy_math::{prelude::*, DQuat, DVec3};
+use bevy_platform_support::collections::HashMap;
 use bevy_reflect::prelude::*;
 use bevy_transform::prelude::*;
-use bevy_utils::{HashMap, Instant};
 use bevy_window::RequestRedraw;
 
 use crate::prelude::*;
@@ -156,7 +159,7 @@ impl Default for LookTo {
     fn default() -> Self {
         Self {
             animation_duration: Duration::from_millis(400),
-            animation_curve: CubicSegment::new_bezier((0.25, 0.0), (0.25, 1.0)),
+            animation_curve: CubicSegment::new_bezier_easing((0.25, 0.0), (0.25, 1.0)),
             map: Default::default(),
         }
     }
